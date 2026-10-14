@@ -1,0 +1,18 @@
+# Keil MDK build artifacts
+Output/
+Listing/
+*.uvguix.*
+*.uvgui.*
+*.bak
+*.saved_uv4
+*.dep
+*.scvd
+JLinkLog.txt
+
+# IDE junk
+.vscode/
+.idea/
+
+# OS junk
+Thumbs.db
+desktop.ini
