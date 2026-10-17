@@ -1,0 +1,6 @@
+# 智能书库导航系统 PC 端依赖（Python >= 3.8）
+# tkinter 为 Python 标准库，无需安装
+bleak>=0.21.0
+pyserial>=3.5
+matplotlib>=3.5.0
+pyperclip>=1.8.2

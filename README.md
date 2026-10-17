@@ -4,11 +4,12 @@
 
 ---
 
-HT32 系列的中文实战资料远少于 STM32。本仓库把一个完整跑通过的智能小车项目整理成三部分，供接触这款芯片的人直接取用：
+HT32 系列的中文实战资料远少于 STM32。本仓库把一个完整跑通过的智能小车项目整理成四部分，供接触这款芯片的人直接取用：
 
 - **`drivers/`** —— 16 个自包含的外设驱动模块（`.c/.h` 可直接拷走），覆盖 GPIO、软件 I2C OLED、双 UART 数据包、MCTM 电机 PWM、GPTM 硬件正交解码、SCTM 舵机与脉宽测量、非阻塞软定时器、串级 PID；
 - **`docs/`** —— 按主题整理的**外设使用要点与踩坑**：定时器家族怎么分工、引脚冲突怎么排查、编码器测速为什么该用硬件解码而不是中断数脉冲、I2C 移植时 7-bit/8-bit 地址约定怎么坑人；
-- **`project/`** —— 最终态**完整可编译**的 Keil 工程（从点灯到双环 PID 的整车），可作为新工程的起点模板。
+- **`project/`** —— 最终态**完整可编译**的 Keil 工程（从点灯到双环 PID 的整车），可作为新工程的起点模板；
+- **`host/`** —— **配套上位机**（Python/Tkinter）：比赛题目"书库找书"的 PC 端——查书换编码、A\* 路径规划、生成 `@...` 指令发给小车，是 [docs/06 串口协议](docs/06-串口数据包协议.md)的发送端。
 
 ## 文档导航
 
@@ -81,6 +82,10 @@ flowchart TB
 
 **复用驱动**：把 `drivers/<模块>/` 的 `.c/.h` 拷进你的工程，依赖只有 Holtek 标准外设库；引脚在各文件顶部宏定义处修改。详见 [drivers/README.md](drivers/README.md)。
 
+## 配套上位机
+
+`host/` 是这套小车的 PC 端（Python/Tkinter，Windows 实测）：书名查位置编码 → A\* 在书库地图上规划 → 生成 `@F3_1_M2.` 式路径指令 → 串口发给小车。想看 docs/06 协议在真实业务里怎么被使用，或需要一个"bleak 后台事件循环线程 + Tkinter 主线程"的完整参考写法，直接翻它。运行方法与模块说明见 [host/README.md](host/README.md)。
+
 ## 项目背景
 
 源自 2025 年春季的一个学期项目：从点灯开始，一个模块一个模块搭起这台小车（蓝牙指令、扫码定位、超声波+红外避障、编码器闭环行驶）。所有代码均在实际硬件上验证；唯一的例外是姿态传感器 MPU-6050——两次移植均未调通，项目因此归档。失败代码与完整诊断一并保留在 [drivers/MPU6050_failed](drivers/MPU6050_failed/) 与 [docs/08](docs/08-I2C地址约定与MPU6050移植案例.md)，希望它对后来者的价值不亚于那些调通的代码。
@@ -91,4 +96,4 @@ HT32F52352 开发板 · 双直流减速电机（霍尔编码器 13PPR × 减速�
 
 ## License
 
-原创代码（`drivers/`、`docs/`、`project/` 中的 `Hardware/User`）以 [MIT](LICENSE) 发布。`project/` 内随仓库分发的 Holtek 固件库与 ARM CMSIS 为官方原样文件，版权归原厂所有、遵循其原始许可，不适用 MIT——详见 [THIRDPARTY_NOTICES](project/HT32F52352_SmartCar_PID/THIRDPARTY_NOTICES.md)。
+原创代码（`drivers/`、`docs/`、`host/`、`project/` 中的 `Hardware/User`）以 [MIT](LICENSE) 发布。`project/` 内随仓库分发的 Holtek 固件库与 ARM CMSIS 为官方原样文件，版权归原厂所有、遵循其原始许可，不适用 MIT——详见 [THIRDPARTY_NOTICES](project/HT32F52352_SmartCar_PID/THIRDPARTY_NOTICES.md)。
